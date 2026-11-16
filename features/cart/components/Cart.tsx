@@ -33,7 +33,7 @@ const Cart = () => {
 
   return (
     <Row gutter={[50, 50]} justify="center" align="middle">
-      <Col xs={24}>
+      <Col data-cy={cart?.length ? "cart-table" : "cart-empty"} xs={24}>
         <CartTable cart={cart} isLoadingCart={isLoading} />
       </Col>
       <Col xs={24}>
@@ -60,11 +60,11 @@ const CartDetails = ({
   cart: CartItem[];
   isLoadingCart?: boolean;
 }) => {
-  const subtotal = calculateCartTotal(cart);
-
   if (isLoadingCart) return <Skeleton active />;
 
   if (!cart?.length) return null;
+
+  const subtotal = calculateCartTotal(cart);
 
   return (
     <Card
@@ -76,7 +76,7 @@ const CartDetails = ({
       {/* Subtotal */}
       <div className="font-poppins mb-2 flex justify-between text-sm">
         <span>Subtotal:</span>
-        <span>${subtotal.toFixed(2)}</span>
+        <span data-cy="cart-total">${subtotal.toFixed(2)}</span>
       </div>
 
       <Divider className="my-2" />
@@ -112,12 +112,12 @@ const CartTable = ({
   cart: CartItem[];
   isLoadingCart?: boolean;
 }) => {
-  const finalProduct = cart.map((item) => {
-    return {
+  const finalProduct: CartTableItem[] = (cart ?? [])
+    .filter((item) => item?.product)
+    .map((item) => ({
       ...item.product,
-      quantity: item.quantity,
-    };
-  });
+      quantity: item.quantity ?? 1,
+    }));
 
   const { status } = useSession();
 
@@ -131,7 +131,7 @@ const CartTable = ({
     useDecrementProduct();
 
   const handleQuantityChange = async (id: string, value: number) => {
-    const product = cart.find((i) => i.productId === id);
+    const product = cart?.find((i) => String(i.productId) === String(id));
 
     if (!product) return;
 
@@ -180,15 +180,15 @@ const CartTable = ({
       render: (_, record) => (
         <div className="flex items-center gap-10">
           <img
-            src={record.image[0]?.img}
-            alt={record.name}
+            src={record?.image?.[0]?.img ?? "/placeholder.png"}
+            alt={record.name ?? "product"}
             width={70}
             height={70}
             className="h-20 w-20 object-contain object-center"
           />
           <Link href={`/products/${record.id}`}>
             <p className="font-poppins hover:text-accent-danger font-semibold text-black">
-              {record.name}
+              {record?.name}
             </p>
           </Link>
         </div>
@@ -208,9 +208,13 @@ const CartTable = ({
       key: "qty",
       render: (qty, record) => (
         <InputNumber
+          data-cy={`cart-quantity-${record.id}`}
           min={1}
           value={qty}
-          onChange={(val) => handleQuantityChange(record.id, Number(val))}
+          onChange={(val) => {
+            if (val === null) return;
+            handleQuantityChange(record.id, val);
+          }}
           disabled={loadingIncrementProduct || loadingDecrementProduct}
         />
       ),
@@ -220,7 +224,7 @@ const CartTable = ({
       key: "subtotal",
       render: (_, record) => (
         <p className="font-poppins font-semibold text-black">
-          ${record.quantity * record.price}
+          ${((record.quantity ?? 0) * (record.price ?? 0)).toFixed(2)}
         </p>
       ),
     },
@@ -235,6 +239,7 @@ const CartTable = ({
           }}
         >
           <Button
+            data-cy={`cart-remove-${record.id}`}
             type="primary"
             danger
             loading={loadingRemoveProductFromCart}

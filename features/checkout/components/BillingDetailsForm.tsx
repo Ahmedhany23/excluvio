@@ -47,6 +47,7 @@ const BillingDetailsForm = ({
 
       <Form.Item name="company_name" label="Company Name">
         <Input
+          data-cy="billing-company"
           type="text"
           size="large"
           onChange={(e) =>
@@ -62,6 +63,7 @@ const BillingDetailsForm = ({
         rules={[{ required: true }]}
       >
         <Input
+          data-cy="billing-street"
           type="text"
           size="large"
           onChange={(e) =>
@@ -74,6 +76,7 @@ const BillingDetailsForm = ({
 
       <Form.Item name="apartment" label="Apartment, floor, etc. (optional)">
         <Input
+          data-cy="billing-apartment"
           type="text"
           size="large"
           onChange={(e) =>
@@ -85,6 +88,7 @@ const BillingDetailsForm = ({
       </Form.Item>
       <Form.Item name="city" label="Town/City" rules={[{ required: true }]}>
         <Input
+          data-cy="billing-city"
           type="text"
           size="large"
           onChange={(e) =>
@@ -96,6 +100,7 @@ const BillingDetailsForm = ({
       </Form.Item>
       <Form.Item name="phone" label="Phone Number" rules={[{ required: true }]}>
         <Input
+          data-cy="billing-phone"
           type="text"
           size="large"
           onChange={(e) =>
@@ -107,6 +112,7 @@ const BillingDetailsForm = ({
       </Form.Item>
       <Form.Item name="email" label="Email" rules={[{ required: true }]}>
         <Input
+          data-cy="billing-email"
           type="text"
           size="large"
           onChange={(e) =>
@@ -118,6 +124,7 @@ const BillingDetailsForm = ({
       </Form.Item>
 
       <Checkbox
+        data-cy="billing-save"
         defaultChecked={stored !== null}
         onChange={handleSaveInformation}
         disabled={!form.isFieldsTouched()}

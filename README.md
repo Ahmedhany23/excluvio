@@ -116,14 +116,48 @@ The project follows a feature-sliced architecture within the Next.js App Router 
 
 ## Testing
 
-The project includes a basic testing setup to ensure core UI and authentication flows work as expected.
+The project uses Jest and React Testing Library for component tests, and Cypress for browser-based end-to-end tests.
 
 ### Tools
+
 - Jest
 - React Testing Library
 - @testing-library/user-event
+- Cypress
 
-### Running Tests
+### Jest Tests
+
 ```bash
 npm run test
-````
+```
+
+### Cypress E2E Tests
+
+Cypress specs are in `cypress/e2e/`. They cover authentication, product search, catalog filtering, cart actions, and checkout page navigation.
+
+1. Configure the required `.env.local` values described in [Getting Started](#installation--setup). A working database with products and the demo login account is needed for the authenticated and catalog flows.
+2. Start the Next.js app in one terminal:
+
+   ```bash
+   npm run dev
+   ```
+
+3. In another terminal, run the full E2E suite:
+
+   ```bash
+   npx cypress run
+   ```
+
+   To open the Cypress interactive runner instead, use:
+
+   ```bash
+   npx cypress open
+   ```
+
+   To run one spec, pass its path, for example:
+
+   ```bash
+   npx cypress run --spec cypress/e2e/cart.cy.js
+   ```
+
+Cypress uses `http://localhost:3000` as its `baseUrl`, configured in `cypress.config.js`. The current checkout E2E flow checks authenticated checkout and the payment success page navigation; it does not submit a real Stripe payment.

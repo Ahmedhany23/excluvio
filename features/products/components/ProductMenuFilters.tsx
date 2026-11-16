@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { Menu, Input, Badge, Button } from "antd";
+import { Menu, Input, Badge, Button, Collapse } from "antd";
 import {
   FilterOutlined,
   TagOutlined,
@@ -30,7 +30,10 @@ export default function ProductMenuFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [priceRange, setPriceRange] = useState({ min: "", max: "" });
+  const [priceRange, setPriceRange] = useState({
+    min: searchParams.get("min") ?? "",
+    max: searchParams.get("max") ?? "",
+  });
 
   const params = useMemo(
     () => new URLSearchParams(searchParams.toString()),
@@ -92,6 +95,7 @@ export default function ProductMenuFilters() {
         </div>
         {hasActiveFilters && (
           <Button
+            data-cy="clear-filters"
             type="link"
             size="small"
             icon={<ClearOutlined />}
@@ -102,7 +106,6 @@ export default function ProductMenuFilters() {
           </Button>
         )}
       </div>
-
       <Menu
         mode="inline"
         multiple
@@ -113,72 +116,82 @@ export default function ProductMenuFilters() {
         onDeselect={({ selectedKeys }) =>
           handleCategoryChange(selectedKeys as string[])
         }
-        expandIcon={({ isOpen }) => <DownOutlined rotate={isOpen ? 180 : 0} />}
         className="border-0"
         style={{ background: "transparent" }}
         items={[
-          // CATEGORY SECTION
           {
             key: "category-group",
-            label: <span className="font-medium text-black!">Categories</span>,
+            label: (
+              <span
+                data-cy="filter-category-group"
+                className="font-medium text-black!"
+              >
+                Categories
+              </span>
+            ),
             icon: <TagOutlined className="text-black!" />,
             children: categories.map((c) => ({
               key: c.id,
-              label: <span className="text-black">{c.label}</span>,
+              label: (
+                <span
+                  data-cy={`filter-category-${c.id}`}
+                  className="text-black"
+                >
+                  {c.label}
+                </span>
+              ),
               icon: <span className="text-lg">{c.icon}</span>,
+              "data-cy": `filter-category-${c.id}`,
             })),
           },
+        ]}
+      />
 
-          // PRICE SECTION
+      <Collapse
+        ghost
+        expandIconPosition="end"
+        items={[
           {
             key: "price-group",
-            label: <span className="font-medium text-black!">Price Range</span>,
-            icon: <DollarOutlined className="text-black!" />,
-            children: [
-              {
-                key: "price-inputs",
-                style: {
-                  pointerEvents: "none",
-                  cursor: "default",
-                  height: "auto",
-                  padding: "12px 24px",
-                },
-                disabled: true,
-                label: (
-                  <div
-                    className="flex flex-col gap-3"
-                    style={{ pointerEvents: "auto" }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="min-w-[50px] text-sm text-gray-600">
-                        Min $
-                      </span>
-                      <Input
-                        name="min"
-                        value={priceRange.min}
-                        onChange={handlePriceChange}
-                        placeholder="0"
-                        className="flex-1"
-                        prefix={<DollarOutlined className="text-gray-400" />}
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="min-w-[50px] text-sm text-gray-600">
-                        Max $
-                      </span>
-                      <Input
-                        name="max"
-                        value={priceRange.max}
-                        onChange={handlePriceChange}
-                        placeholder="9999"
-                        className="flex-1"
-                        prefix={<DollarOutlined className="text-gray-400" />}
-                      />
-                    </div>
-                  </div>
-                ),
-              },
-            ],
+            label: (
+              <span
+                data-cy="filter-price-group"
+                className="font-medium text-black"
+              >
+                <DollarOutlined className="mr-2" />
+                Price Range
+              </span>
+            ),
+            children: (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="min-w-[50px] text-sm text-gray-600">
+                    Min $
+                  </span>
+                  <Input
+                    data-cy="filter-min-price"
+                    name="min"
+                    value={priceRange.min}
+                    onChange={handlePriceChange}
+                    placeholder="0"
+                    inputMode="numeric"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="min-w-[50px] text-sm text-gray-600">
+                    Max $
+                  </span>
+                  <Input
+                    data-cy="filter-max-price"
+                    name="max"
+                    value={priceRange.max}
+                    onChange={handlePriceChange}
+                    placeholder="9999"
+                    inputMode="numeric"
+                  />
+                </div>
+              </div>
+            ),
           },
         ]}
       />

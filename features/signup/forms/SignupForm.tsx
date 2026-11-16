@@ -48,6 +48,7 @@ const SignupForm = () => {
     <>
       {contextHolder}
       <Form
+        data-cy="signup-form"
         className="w-full space-y-10"
         layout="vertical"
         onFinish={handleSignup}
@@ -65,7 +66,7 @@ const SignupForm = () => {
           name="name"
           rules={[{ required: true, message: "Please enter your name" }]}
         >
-          <Input placeholder="Name" size="large" />
+          <Input data-cy="signup-name" placeholder="Name" size="large" />
         </Form.Item>
 
         {/* Email */}
@@ -76,7 +77,7 @@ const SignupForm = () => {
             { type: "email", message: "Please enter a valid email" },
           ]}
         >
-          <Input placeholder="Email" size="large" />
+          <Input data-cy="signup-email" placeholder="Email" size="large" />
         </Form.Item>
 
         {/* Password */}
@@ -87,7 +88,7 @@ const SignupForm = () => {
             { min: 6, message: "Password must be at least 6 characters" },
           ]}
         >
-          <Input.Password placeholder="Password" size="large" />
+          <Input.Password data-cy="signup-password" placeholder="Password" size="large" />
         </Form.Item>
 
         {/* Confirm Password */}
@@ -106,12 +107,13 @@ const SignupForm = () => {
             }),
           ]}
         >
-          <Input.Password placeholder="Confirm Password" size="large" />
+          <Input.Password data-cy="signup-confirm-password" placeholder="Confirm Password" size="large" />
         </Form.Item>
 
         {/* Submit */}
         <Form.Item>
           <Button
+            data-cy="signup-submit"
             type="primary"
             htmlType="submit"
             size="large"

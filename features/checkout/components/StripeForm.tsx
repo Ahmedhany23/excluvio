@@ -175,6 +175,7 @@ const StripeForm = ({ amount, billingDetails }: StripeFormProps) => {
           )}
           <Col xs={24}>
             <Button
+              data-cy="pay-submit"
               type="primary"
               htmlType="submit"
               size="large"

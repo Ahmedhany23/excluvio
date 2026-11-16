@@ -15,7 +15,7 @@ const ProductsGrid = () => {
   if (isLoadingProducts) return <ProductFallbackLoader />;
 
   return (
-    <Row gutter={[16, 16]} justify="center" align="middle">
+    <Row data-cy="products-grid" gutter={[16, 16]} justify="center" align="middle">
       {products.map((product) => (
         <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
           <ProductCard

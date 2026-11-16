@@ -27,9 +27,18 @@ export function useCountdown(targetDate: string | number | Date) {
     };
   }, [targetDate]);
 
-  const [timeLeft, setTimeLeft] = useState(() => calc());
+  // Keep the server render and first browser render identical.
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isFinished: false,
+  });
 
   useEffect(() => {
+    // Calculate the real countdown after hydration, then update every second.
+    setTimeLeft(calc());
     const interval = setInterval(() => {
       setTimeLeft(calc());
     }, 1000);

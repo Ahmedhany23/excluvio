@@ -86,6 +86,7 @@ const LoginForm = () => {
       {contextHolder}
 
       <Form<LoginValues>
+        data-cy="login-form"
         form={form}
         className="w-full space-y-10"
         layout="vertical"
@@ -117,7 +118,7 @@ const LoginForm = () => {
             { type: "email", message: "Please enter a valid email" },
           ]}
         >
-          <Input placeholder="Email" size="large" />
+          <Input data-cy="login-email" placeholder="Email" size="large" />
         </Form.Item>
 
         <Form.Item
@@ -127,11 +128,12 @@ const LoginForm = () => {
             { min: 6, message: "Password must be at least 6 characters" },
           ]}
         >
-          <Input.Password placeholder="Password" size="large" />
+          <Input.Password data-cy="login-password" placeholder="Password" size="large" />
         </Form.Item>
 
         <Form.Item>
           <Button
+            data-cy="login-submit"
             type="primary"
             htmlType="submit"
             size="large"

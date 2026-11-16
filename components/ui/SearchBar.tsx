@@ -17,11 +17,12 @@ export const SearchBar = () => {
     <Form onFinish={handleSubmit} className="w-full">
       <Space.Compact style={{ width: "100%" }}>
         <Input
+          data-cy="product-search-input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="What are you looking for?"
         />
-        <Button htmlType="submit">
+        <Button data-cy="product-search-submit" htmlType="submit">
           <SearchOutlined />
         </Button>
       </Space.Compact>
